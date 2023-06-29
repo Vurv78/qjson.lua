@@ -25,8 +25,8 @@ it("should encode a lookup table", function()
 
 	-- Todo: Better approach for this.
 	local equality =
-		encoded == [[{"foo": "bar","1": "qux"}]] or
-		encoded == [[{"1": "qux","foo": "bar"}]]
+		encoded == [[{"foo":"bar","1":"qux"}]] or
+		encoded == [[{"1":"qux","foo":"bar"}]]
 
 	expect(equality).toBeTruthy()
 end)

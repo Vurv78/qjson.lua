@@ -85,7 +85,7 @@ function encode(tbl --[[@param tbl table]]) ---@return string
 		local kvs, nkvs = {}, 0
 		for k, v in pairs(tbl) do
 			nkvs = nkvs + 1
-			kvs[nkvs] = tostring(k) .. ": " .. value(v)
+			kvs[nkvs] = tostring(k) .. ":" .. value(v)
 		end
 		return "{" .. concat(kvs, ",", 1, nkvs) .. "}";
 	end

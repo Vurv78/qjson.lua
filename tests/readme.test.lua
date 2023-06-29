@@ -5,15 +5,15 @@ test("readme encoding should work", function()
 
 	-- Todo: Better approach for this.
 	local equality =
-		encoded == [[{"qjson": ["fast","simple","tiny"],"hello": "world!"}]] or
-		encoded == [[{"hello": "world!","qjson": ["fast","simple","tiny"]}]]
+		encoded == [[{"qjson":["fast","simple","tiny"],"hello":"world!"}]] or
+		encoded == [[{"hello":"world!","qjson":["fast","simple","tiny"]}]]
 
 	expect(equality).toBeTruthy()
 end)
 
 test("readme decoding should work", function()
 	local decoded = qjson.decode([[
-		{ "foo": "bar" }
+		{ "foo":"bar" }
 	]])
 
 	expect(decoded).toEqual({ foo = "bar" })
