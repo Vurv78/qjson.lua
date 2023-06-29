@@ -24,6 +24,7 @@ qjson.lua : 7e-07s [x1] (min: 0s, max 1e-06s)
 local json = require "qjson"
 print(json.encode {
 	hello = "world!",
+	qjson = { "fast", "simple", "tiny" }
 })
 
 --[[
