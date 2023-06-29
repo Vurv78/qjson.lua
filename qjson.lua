@@ -43,10 +43,9 @@ local function decode(json --[[@param json string]]) ---@return table
 	local function value()
 		return faststring()
 			or object()
-			or tonumber(consume("^%s*(%-?%d+%.%d+)") or consume("^%s*(%-?%d+)"))
+			or tonumber(consume("^%s*(%-?%d+%.?%d*[eE][%+%-]?%d+)") or consume("^%s*(%-?%d+%.?%d*)"))
 			or consume("^%s*(true)") or consume("^%s*(false)") or consume("^%s*(null)")
 			or array()
-			or tonumber(consume("^%s*(%-?%d+[eE][%+%-]?%d+)")) -- Exponential number.
 			or slowstring()
 	end
 
@@ -99,10 +98,10 @@ local function decode(json --[[@param json string]]) ---@return table
 		end
 	end
 
-	return object()
+	return object() or array()
 end
 
-local concat, tostring, pairs = table.concat, tostring, pairs
+local concat, tostring, format, pairs = table.concat, tostring, string.format, pairs
 local function isarray(t)
 	local i = 1
 	for k in pairs(t) do
@@ -120,7 +119,7 @@ local function value(v)
 	if t == "table" then
 		return encode(v)
 	elseif t == "string" then
-		return "\"" .. v .. "\""
+		return format("%q", v)
 	else
 		return tostring(v)
 	end

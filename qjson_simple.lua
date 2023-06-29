@@ -50,7 +50,7 @@ local function decode(json --[[@param json string]]) ---@return table
 	return table()
 end
 
-local concat, tostring, pairs = table.concat, tostring, pairs
+local concat, tostring, format, pairs = table.concat, tostring, string.format, pairs
 local function isarray(t)
 	local i = 1
 	for k in pairs(t) do
@@ -68,7 +68,7 @@ local function value(v)
 	if t == "table" then
 		return encode(v)
 	elseif t == "string" then
-		return "\"" .. v .. "\""
+		return format("%q", v)
 	else
 		return tostring(v)
 	end
