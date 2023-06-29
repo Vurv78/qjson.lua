@@ -2,6 +2,11 @@ name: Run Lest
 
 on:
   push:
+    paths:
+      - "**.lua"
+  pull_request:
+    paths:
+      - "**.lua"
 
 jobs:
   test:
