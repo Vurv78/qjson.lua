@@ -1,2 +1,14 @@
-- name: Run Lest
-  uses: TAServers/lest@v1.0.6
+name: Run Lest
+
+on:
+  push:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@master
+
+      - name: Run Lest Action
+        uses: TAServers/lest@v1.0.6
