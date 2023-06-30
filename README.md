@@ -7,7 +7,7 @@ Tiny, quick JSON encoding/decoding in pure Lua.
 ## Features
 * Pure lua, should work on every version (5.1-5.4, JIT)
 * Quick, focused on performance. (See benchmarks below)
-* Actually tiny, ~150 sloc.
+* Very small, ~180 sloc.
 * Decent error handling: `Expected : to follow key for object at char 39`
 
 ## Usage
@@ -32,7 +32,7 @@ print(json.decode([[
 * This does not guarantee 100% compatibility with the more niche parts of the JSON spec (like unicode escapes)
 
 ## Benchmarks
-Using benchmarks/bench.lua:
+Using benchmarks/bench.lua [(which tests the simdjson twitter example)](https://raw.githubusercontent.com/simdjson/simdjson/master/jsonexamples/twitter.json) through WSL:
 
 ```
 LuaJIT 2.1.0-beta3
@@ -40,16 +40,16 @@ LuaJIT 2.1.0-beta3
 
 Running benchmarks...
 | Name (Decode)   | Min        | Max        | Avg        | Avg / Best  |
-| vurv78/qjson    | 0.0091     | 0.012012   | 0.00968749 | x1.75539    |
-| rxi/json        | 0.004745   | 0.006889   | 0.0055187  | x1          |
-| actboy168/json  | 0.010586   | 0.012723   | 0.0113411  | x2.05503    |
-| luadist/dkjson  | 0.011112   | 0.016785   | 0.0134858  | x2.44366    |
+| vurv78/qjson    | 0.008763   | 0.010837   | 0.00939495 | x1.72715    |
+| rxi/json        | 0.00475    | 0.007055   | 0.00543957 | x1          |
+| actboy168/json  | 0.010547   | 0.013259   | 0.0112183  | x2.06235    |
+| luadist/dkjson  | 0.011222   | 0.014534   | 0.0126976  | x2.3343     |
 
 | Name (Encode)   | Min        | Max        | Avg        | Avg / Best  |
-| vurv78/qjson    | 0.003788   | 0.004491   | 0.004021   | x1          |
-| rxi/json        | 0.0104     | 0.014977   | 0.0108013  | x2.68623    |
-| actboy168/json  | 0.010361   | 0.012899   | 0.0110817  | x2.75596    |
-| luadist/dkjson  | 0.014438   | 0.017056   | 0.0153153  | x3.80883    |
+| vurv78/qjson    | 0.001677   | 0.002637   | 0.00189174 | x1          |
+| rxi/json        | 0.010513   | 0.011322   | 0.010924   | x5.77459    |
+| actboy168/json  | 0.009892   | 0.012293   | 0.0104864  | x5.54327    |
+| luadist/dkjson  | 0.014829   | 0.01985    | 0.0157059  | x8.30237    |
 ```
 
 ```
@@ -58,18 +58,19 @@ Lua 5.3
 
 Running benchmarks...
 | Name (Decode)   | Min        | Max        | Avg        | Avg / Best  |
-| vurv78/qjson    | 0.015195   | 0.018472   | 0.0159068  | x1          |
-| rxi/json        | 0.045206   | 0.052624   | 0.048079   | x3.02255    |
-| actboy168/json  | 0.019059   | 0.022751   | 0.0200545  | x1.26075    |
-| luadist/dkjson  | 0.028623   | 0.034445   | 0.0307014  | x1.93009    |
+| luadist/dkjson  | 0.028568   | 0.033705   | 0.0306484  | x1.94652    |
+| rxi/json        | 0.045178   | 0.053548   | 0.0480421  | x3.05121    |
+| vurv78/qjson    | 0.015006   | 0.018043   | 0.0157452  | x1          |
+| actboy168/json  | 0.019061   | 0.023373   | 0.0200551  | x1.27372    |
 
 | Name (Encode)   | Min        | Max        | Avg        | Avg / Best  |
-| vurv78/qjson    | 0.006012   | 0.017234   | 0.00760202 | x1          |
-| rxi/json        | 0.015458   | 0.019752   | 0.0170518  | x2.24306    |
-| actboy168/json  | 0.015981   | 0.021264   | 0.0169299  | x2.22703    |
-| luadist/dkjson  | 0.02172    | 0.025274   | 0.0229826  | x3.02323    |
+| luadist/dkjson  | 0.021639   | 0.024754   | 0.0226422  | x4.10556    |
+| rxi/json        | 0.015463   | 0.019618   | 0.0166444  | x3.01802    |
+| vurv78/qjson    | 0.005148   | 0.006336   | 0.00551502 | x1          |
+| actboy168/json  | 0.016263   | 0.018331   | 0.0170535  | x3.09218    |
 ```
 
-From here, you can see this library is significantly faster on regular lua, and a bit slower than rxi/json on LuaJIT.
+From here, you can see this library is significantly faster for `json.encode` in comparison to `json.decode`.
+Additionally `decode` is faster on PUC-Lua than LuaJIT.
 
 Currently working on making it faster for LuaJIT, but this is pretty hard to fix considering making it faster would require not using as many [lua patterns](https://www.lua.org/pil/20.2.html), which would slow down PUC-Lua.

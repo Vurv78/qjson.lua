@@ -159,33 +159,62 @@ local function isarray(t)
 	return true
 end
 
-local encode
-local function value(v)
+local _encode
+local function value(v, buffer, nbuffer)
 	local t = type(v)
 	if t == "table" then
-		return encode(v)
+		return _encode(v, buffer, nbuffer)
 	elseif t == "string" then
-		return format("%q", v)
+		buffer[nbuffer + 1] = format("%q", v)
 	else
-		return tostring(v)
+		buffer[nbuffer + 1] = tostring(v)
 	end
+	return nbuffer + 1
 end
 
-function encode(tbl --[[@param tbl table]]) ---@return string
+function _encode(tbl --[[@param tbl table]], buffer --[[@param buffer table]], nbuffer --[[@param nbuffer integer]])
 	if isarray(tbl) then
-		local strs, len = {}, #tbl
+		nbuffer = nbuffer + 1
+		buffer[nbuffer] = "["
+
+		local len = #tbl
 		for i = 1, len do
-			strs[i] = value(tbl[i])
+			nbuffer = value(tbl[i], buffer, nbuffer) + 1
+			buffer[nbuffer] = ","
 		end
-		return "[" .. concat(strs, ",", 1, len) .. "]"
+
+		if len ~= 0 then
+			buffer[nbuffer] = "]"
+		else
+			nbuffer = nbuffer + 1
+			buffer[nbuffer] = "]"
+		end
 	else
-		local kvs, nkvs = {}, 0
+		nbuffer = nbuffer + 1
+		buffer[nbuffer] = "{"
+
+		local prev = nbuffer
 		for k, v in pairs(tbl) do
-			nkvs = nkvs + 1
-			kvs[nkvs] = "\"" .. tostring(k) .. "\"" .. ":" .. value(v)
+			nbuffer = nbuffer + 1
+			buffer[nbuffer] = "\"" .. tostring(k) .. "\":"
+			nbuffer = value(v, buffer, nbuffer) + 1
+			buffer[nbuffer] = ","
 		end
-		return "{" .. concat(kvs, ",", 1, nkvs) .. "}";
+
+		if nbuffer ~= prev then
+			buffer[nbuffer] = "}"
+		else
+			nbuffer = nbuffer + 1
+			buffer[nbuffer] = "}"
+		end
 	end
+
+	return nbuffer
+end
+
+local function encode(tbl --[[@param tbl table]]) ---@return string
+	local buffer = {}
+	return concat(buffer, "", 1, _encode(tbl, buffer, 0))
 end
 
 return {
