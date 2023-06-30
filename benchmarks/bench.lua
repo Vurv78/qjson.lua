@@ -46,6 +46,10 @@ local LIBS --[[@type table<string, table>]] = {
 	["rxi/json"] = loadstring(get("https://raw.githubusercontent.com/rxi/json.lua/master/json.lua"))(),
 	["actboy168/json"] = loadstring(get("https://raw.githubusercontent.com/actboy168/json.lua/master/json.lua"))(),
 	["luadist/dkjson"] = loadstring(get("https://raw.githubusercontent.com/LuaDist/dkjson/master/dkjson.lua"))(),
+	["grafi-tt/lunajson"] = {
+		encode = loadstring(get("https://raw.githubusercontent.com/grafi-tt/lunajson/master/src/lunajson/encoder.lua"))()(),
+		decode = loadstring(get("https://raw.githubusercontent.com/grafi-tt/lunajson/master/src/lunajson/decoder.lua"))()()
+	}
 }
 
 local DECODE_TARGET = get("https://raw.githubusercontent.com/simdjson/simdjson/master/jsonexamples/twitter.json")
@@ -62,7 +66,7 @@ do
 	local total --[=[@type table<string, BenchResult>]=] = {}
 	for name, lib in pairs(LIBS) do
 		local decode = lib.decode
-		total[name] = bench(100, function()
+		total[name] = bench(200, function()
 			decode(DECODE_TARGET)
 		end)
 	end
@@ -74,9 +78,9 @@ do
 		end
 	end
 
-	print( ("| %-15s | %-10s | %-10s | %-10s | %-11s |"):format("Name (Decode)", "Min", "Max", "Avg", "Avg / Best") )
+	print( ("| %-20s | %-10s | %-10s | %-10s | %-11s |"):format("Name (Decode)", "Min", "Max", "Avg", "Avg / Best") )
 	for name, result in pairs(total) do
-		print( ("| %-15s | %-10g | %-10g | %-10g | x%-10g |"):format(name, result.min, result.max, result.avg, result.avg / best) )
+		print( ("| %-20s | %-10g | %-10g | %-10g | x%-10g |"):format(name, result.min, result.max, result.avg, result.avg / best) )
 	end
 end
 
@@ -86,7 +90,7 @@ do
 	local total --[=[@type table<string, BenchResult>]=] = {}
 	for name, lib in pairs(LIBS) do
 		local encode = lib.encode
-		total[name] = bench(100, function()
+		total[name] = bench(200, function()
 			encode(ENCODE_TARGET)
 		end)
 	end
@@ -98,8 +102,8 @@ do
 		end
 	end
 
-	print( ("| %-15s | %-10s | %-10s | %-10s | %-11s |"):format("Name (Encode)", "Min", "Max", "Avg", "Avg / Best") )
+	print( ("| %-20s | %-10s | %-10s | %-10s | %-11s |"):format("Name (Encode)", "Min", "Max", "Avg", "Avg / Best") )
 	for name, result in pairs(total) do
-		print( ("| %-15s | %-10g | %-10g | %-10g | x%-10g |"):format(name, result.min, result.max, result.avg, result.avg / best) )
+		print( ("| %-20s | %-10g | %-10g | %-10g | x%-10g |"):format(name, result.min, result.max, result.avg, result.avg / best) )
 	end
 end

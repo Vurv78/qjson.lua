@@ -39,17 +39,19 @@ LuaJIT 2.1.0-beta3
 11th Gen Intel(R) Core(TM) i7-11800H @ 2.30GHz
 
 Running benchmarks...
-| Name (Decode)   | Min        | Max        | Avg        | Avg / Best  |
-| vurv78/qjson    | 0.008763   | 0.010837   | 0.00939495 | x1.72715    |
-| rxi/json        | 0.00475    | 0.007055   | 0.00543957 | x1          |
-| actboy168/json  | 0.010547   | 0.013259   | 0.0112183  | x2.06235    |
-| luadist/dkjson  | 0.011222   | 0.014534   | 0.0126976  | x2.3343     |
+| Name (Decode)        | Min        | Max        | Avg        | Avg / Best  |
+| vurv78/qjson         | 0.008706   | 0.011876   | 0.00915391 | x1.71064    |
+| actboy168/json       | 0.010476   | 0.013891   | 0.0113075  | x2.11309    |
+| luadist/dkjson       | 0.011261   | 0.016459   | 0.0126863  | x2.37076    |
+| rxi/json             | 0.004783   | 0.007264   | 0.00535117 | x1          |
+| grafi-tt/lunajson    | 0.005398   | 0.007717   | 0.00583864 | x1.0911     |
 
-| Name (Encode)   | Min        | Max        | Avg        | Avg / Best  |
-| vurv78/qjson    | 0.001677   | 0.002637   | 0.00189174 | x1          |
-| rxi/json        | 0.010513   | 0.011322   | 0.010924   | x5.77459    |
-| actboy168/json  | 0.009892   | 0.012293   | 0.0104864  | x5.54327    |
-| luadist/dkjson  | 0.014829   | 0.01985    | 0.0157059  | x8.30237    |
+| Name (Encode)        | Min        | Max        | Avg        | Avg / Best  |
+| vurv78/qjson         | 0.00166    | 0.004003   | 0.00189934 | x1          |
+| actboy168/json       | 0.010009   | 0.012101   | 0.0107158  | x5.64188    |
+| luadist/dkjson       | 0.014416   | 0.017742   | 0.0152628  | x8.03585    |
+| rxi/json             | 0.010861   | 0.013424   | 0.0114725  | x6.04024    |
+| grafi-tt/lunajson    | 0.007869   | 0.010028   | 0.00877393 | x4.61946    |
 ```
 
 ```
@@ -57,17 +59,19 @@ Lua 5.3
 11th Gen Intel(R) Core(TM) i7-11800H @ 2.30GHz
 
 Running benchmarks...
-| Name (Decode)   | Min        | Max        | Avg        | Avg / Best  |
-| luadist/dkjson  | 0.028568   | 0.033705   | 0.0306484  | x1.94652    |
-| rxi/json        | 0.045178   | 0.053548   | 0.0480421  | x3.05121    |
-| vurv78/qjson    | 0.015006   | 0.018043   | 0.0157452  | x1          |
-| actboy168/json  | 0.019061   | 0.023373   | 0.0200551  | x1.27372    |
+| Name (Decode)        | Min        | Max        | Avg        | Avg / Best  |
+| actboy168/json       | 0.019026   | 0.023047   | 0.0202998  | x1.58917    |
+| rxi/json             | 0.045717   | 0.05649    | 0.048758   | x3.81701    |
+| luadist/dkjson       | 0.02851    | 0.038804   | 0.0317486  | x2.48544    |
+| vurv78/qjson         | 0.014956   | 0.019906   | 0.0165542  | x1.29595    |
+| grafi-tt/lunajson    | 0.011663   | 0.015941   | 0.0127739  | x1          |
 
-| Name (Encode)   | Min        | Max        | Avg        | Avg / Best  |
-| luadist/dkjson  | 0.021639   | 0.024754   | 0.0226422  | x4.10556    |
-| rxi/json        | 0.015463   | 0.019618   | 0.0166444  | x3.01802    |
-| vurv78/qjson    | 0.005148   | 0.006336   | 0.00551502 | x1          |
-| actboy168/json  | 0.016263   | 0.018331   | 0.0170535  | x3.09218    |
+| Name (Encode)        | Min        | Max        | Avg        | Avg / Best  |
+| actboy168/json       | 0.016101   | 0.029937   | 0.0171029  | x3.06483    |
+| rxi/json             | 0.015395   | 0.019102   | 0.0168397  | x3.01765    |
+| luadist/dkjson       | 0.02162    | 0.025159   | 0.0226016  | x4.05019    |
+| vurv78/qjson         | 0.005168   | 0.0067     | 0.00558039 | x1          |
+| grafi-tt/lunajson    | 0.011286   | 0.016953   | 0.0124624  | x2.23325    |
 ```
 
 From here, you can see this library is significantly faster for `json.encode` in comparison to `json.decode`.
