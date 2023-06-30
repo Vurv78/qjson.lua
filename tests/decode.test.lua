@@ -9,15 +9,11 @@ it("should parse an array of strings", function()
 end)
 
 it("should parse an array of booleans", function()
-	expect(qjson.decode("[true, false]")).toEqual({ "true", "false" })
+	expect(qjson.decode("[true, false]")).toEqual({ true, false })
 end)
 
-it("should parse an array of booleans into strings", function()
-	expect(qjson.decode("[true, false]")).toEqual({ "true", "false" })
-end)
-
-it("should parse an array of null into strings", function()
-	expect(qjson.decode("[null, null]")).toEqual({ "null", "null" })
+it("should parse an array of null", function()
+	expect(qjson.decode("[null, null]")).toEqual({ qjson.NULL, qjson.NULL })
 end)
 
 it("should parse an empty array", function()
@@ -25,7 +21,7 @@ it("should parse an empty array", function()
 end)
 
 it("should not care about whitespace", function()
-	expect(qjson.decode(" 	 	[  1	 ,	  null 	 	 ] 	 ")).toEqual({ 1, "null" })
+	expect(qjson.decode(" 	 	[  1	 ,	  null 	 	 ] 	 ")).toEqual({ 1, qjson.NULL })
 end)
 
 it("should parse an object holding a string", function()
@@ -69,7 +65,7 @@ it("should parse an object holding a list of empty objects", function()
 end)
 
 it("should parse an object holding a list of random values", function()
-	expect(qjson.decode([[{ "hmm": [ 1, {}, "test", true ] }]])).toEqual({ hmm = { 1, {}, "test", "true" } })
+	expect(qjson.decode([[{ "hmm": [ 1, {}, "test", true ] }]])).toEqual({ hmm = { 1, {}, "test", true } })
 end)
 
 it("should parse an object holding objects to five levels of depth", function()

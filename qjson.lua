@@ -1,31 +1,27 @@
-local find, sub, gsub, tonumber, error = string.find, string.sub, string.gsub, tonumber, error
-local function decode(json --[[@param json string]]) ---@return table
-	local ptr = 0
+local NULL = {}
+
+local find, sub, tonumber, error = string.find, string.sub, tonumber, error
+local function decode(json --[[@param json string]]) ---@return any
+	local ptr = 1
+
 	local function consume(pattern --[[@param pattern string]]) ---@return string?
 		local _, finish, match = find(json, pattern, ptr)
 		if finish then
 			ptr = finish + 1
 			return match or true
 		end
-		return nil
 	end
 
-	local repl = { -- escape characters
-		["b"] = "\b", ["f"] = "\f", ["n"] = "\n", ["r"] = "\r",
-		["t"] = "\t", ["\\"] = "\\", ["\""] = "\""
-	}
-
-	local function slowstring() -- string parser that works with escapes. fallback at very far end of parsing order, since rare case.
-		local _, start = find(json, "^%s*\"", ptr)
-		if not start then return end
-		ptr = start + 1
+	local function slowstring() -- string parser that supports escapes.
+		local start = ptr + 1 -- skip initial quote
+		ptr = start
 
 		while true do
-			local _, finish, escapes = find(json, "(\\*)\"", ptr)
+			local start, finish = find(json, "\\*\"", ptr)
 			if finish then
 				ptr = finish + 1
-				if #escapes % 2 == 0 then
-					return ( gsub( sub(json, start + 1, finish - 1), "\\([bfnrt\\\"])", repl) )
+				if (finish - start) % 2 == 0 then
+					return sub(json, start, finish - 1) -- return (gsub(sub(json, start, finish - 1), "\\([bfnrt\\\"])", ESCAPES))
 				end
 			else
 				error("Missing end quote for string at char " .. ptr)
@@ -33,29 +29,64 @@ local function decode(json --[[@param json string]]) ---@return table
 		end
 	end
 
-	local object, array
-	local function faststring() -- Parses a string without any escapes. Fastest and most common case.
-		return consume("^%s*\"([^\"\\]*)\"")
+
+	local function number()
+		return tonumber(consume("^(-?%d*.?%d+[eE]?[+-]?%d*)"))
 	end
 
-	--- Parses a JSON value.
-	--- Order is important for performance with common cases.
-	local function value()
-		return faststring()
-			or object()
-			or tonumber(consume("^%s*(%-?%d+%.?%d*[eE][%+%-]?%d+)") or consume("^%s*(%-?%d+%.?%d*)"))
-			or consume("^%s*(true)") or consume("^%s*(false)") or consume("^%s*(null)")
-			or array()
-			or slowstring()
+	local value
+	local function whitespace()
+		ptr = find(json, "%S", ptr) or ptr -- skip past whitespace, return immediate value
+		return value()
 	end
 
-	function object()
-		if consume("^%s*{") then
+	local function string()
+		local start = ptr + 1
+		local quot = find(json, '"', start, true)
+		local prev = quot - 1
+		if sub(json, prev, prev) ~= "\\" then
+			ptr = quot + 1
+			return sub(json, start, prev)
+		else
+			return slowstring()
+		end
+	end
+
+	local peek = {
+		["\""] = string,
+		["t"] = function()
+			if sub(json, ptr, ptr + 3) == "true" then
+				ptr = ptr + 4
+				return true
+			end
+		end,
+		["f"] = function()
+			if sub(json, ptr, ptr + 4) == "false" then
+				ptr = ptr + 5
+				return false
+			end
+		end,
+		["n"] = function()
+			if sub(json, ptr, ptr + 3) == "null" then
+				ptr = ptr + 4
+				return NULL
+			end
+		end,
+
+		["0"] = number, ["1"] = number, ["2"] = number,
+		["3"] = number, ["4"] = number, ["5"] = number,
+		["6"] = number, ["7"] = number, ["8"] = number,
+		["9"] = number, ["-"] = number,
+
+		["{"] = function()
+			ptr = ptr + 1
+
 			local fields = {}
 			if consume("^%s*}") then return fields end
 
 			repeat
-				local key = faststring()
+				ptr = find(json, "%S", ptr) or ptr -- skip whitespace inline
+				local key = string()
 				if not key then
 					error("Expected field for object at char " .. ptr)
 				end
@@ -65,7 +96,7 @@ local function decode(json --[[@param json string]]) ---@return table
 				end
 
 				local val = value()
-				if val then
+				if val ~= nil then
 					fields[key] = val
 				else
 					error("Expected value for field " .. key .. " at char " .. ptr)
@@ -75,18 +106,18 @@ local function decode(json --[[@param json string]]) ---@return table
 			until consume("^%s*}")
 
 			return fields
-		end
-	end
+		end,
 
-	function array()
-		if consume("^%s*%[") then
+		["["] = function()
+			ptr = ptr + 1 -- Already know we're at the [ from value()
+
 			local values, nvalues = {}, 0
 			if consume("^%s*%]") then return values end
 
 			repeat
 				nvalues = nvalues + 1
 				local value = value()
-				if value then
+				if value ~= nil then
 					values[nvalues] = value
 				else
 					error("Expected value for field #" .. nvalues + 1 .. " at char " .. ptr)
@@ -95,21 +126,36 @@ local function decode(json --[[@param json string]]) ---@return table
 			until consume("^%s*%]")
 
 			return values
+		end,
+
+		[" "] = whitespace, ["\t"] = whitespace, ["\n"] = whitespace, ["\r"] = whitespace,
+	}
+
+	function value()
+		local p = peek[sub(json, ptr, ptr)]
+		if p then
+			return p()
+		else
+			error("Failed parsing at character " .. ptr)
 		end
 	end
 
-	return object() or array()
+	return value()
 end
 
-local concat, tostring, format, pairs = table.concat, tostring, string.format, pairs
+local concat, tostring, format, pairs, type = table.concat, tostring, string.format, pairs, type
+
 local function isarray(t)
-	local i = 1
+	local len = #t
+
 	for k in pairs(t) do
-		if type(k) ~= "number" or k ~= i then
+		if len == 0 or type(k) ~= "number" then
 			return false
+		else
+			len = len - 1
 		end
-		i = i + 1
 	end
+
 	return true
 end
 
@@ -143,6 +189,7 @@ function encode(tbl --[[@param tbl table]]) ---@return string
 end
 
 return {
+	NULL = NULL,
 	encode = encode,
 	decode = decode
 }
