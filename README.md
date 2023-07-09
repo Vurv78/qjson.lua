@@ -35,46 +35,47 @@ print(json.decode([[
 Using benchmarks/bench.lua [(which tests the simdjson twitter example)](https://raw.githubusercontent.com/simdjson/simdjson/master/jsonexamples/twitter.json) through WSL:
 
 ```
-LuaJIT 2.1.0-beta3
+LuaJIT 2.1.0-beta3 (Windows 11)
 11th Gen Intel(R) Core(TM) i7-11800H @ 2.30GHz
+```
 
-Running benchmarks...
 | Name (Decode)        | Min        | Max        | Avg        | Avg / Best  |
-| vurv78/qjson         | 0.008706   | 0.011876   | 0.00915391 | x1.71064    |
-| actboy168/json       | 0.010476   | 0.013891   | 0.0113075  | x2.11309    |
-| luadist/dkjson       | 0.011261   | 0.016459   | 0.0126863  | x2.37076    |
-| rxi/json             | 0.004783   | 0.007264   | 0.00535117 | x1          |
-| grafi-tt/lunajson    | 0.005398   | 0.007717   | 0.00583864 | x1.0911     |
+| ---                  | ---        | ---        | ---        | ---         |
+| actboy168/json       | 0          | 0.025      | 0.013235   | x2.0456     |
+| vurv78/qjson         | 0          | 0.023      | 0.00881    | x1.36167    |
+| rxi/json             | 0          | 0.022      | 0.00704    | x1.0881     |
+| luadist/dkjson       | 0.004      | 0.026      | 0.01519    | x2.34776    |
+| grafi-tt/lunajson    | 0          | 0.018      | 0.00647    | x1          |
 
 | Name (Encode)        | Min        | Max        | Avg        | Avg / Best  |
-| vurv78/qjson         | 0.00166    | 0.004003   | 0.00189934 | x1          |
-| actboy168/json       | 0.010009   | 0.012101   | 0.0107158  | x5.64188    |
-| luadist/dkjson       | 0.014416   | 0.017742   | 0.0152628  | x8.03585    |
-| rxi/json             | 0.010861   | 0.013424   | 0.0114725  | x6.04024    |
-| grafi-tt/lunajson    | 0.007869   | 0.010028   | 0.00877393 | x4.61946    |
-```
+| ---                  | ---        | ---        | ---        | ---         |
+| actboy168/json       | 0          | 0.023      | 0.01057    | x6.84142    |
+| vurv78/qjson         | 0.001      | 0.003      | 0.001545   | x1          |
+| rxi/json             | 0          | 0.024      | 0.010825   | x7.00647    |
+| luadist/dkjson       | 0.013      | 0.019      | 0.01588    | x10.2783    |
+| grafi-tt/lunajson    | 0          | 0.02       | 0.00907    | x5.87055    |
 
 ```
-Lua 5.3
+Lua 5.3 (WSL : Windows 11)
 11th Gen Intel(R) Core(TM) i7-11800H @ 2.30GHz
+```
 
-Running benchmarks...
 | Name (Decode)        | Min        | Max        | Avg        | Avg / Best  |
-| actboy168/json       | 0.019026   | 0.023047   | 0.0202998  | x1.58917    |
-| rxi/json             | 0.045717   | 0.05649    | 0.048758   | x3.81701    |
-| luadist/dkjson       | 0.02851    | 0.038804   | 0.0317486  | x2.48544    |
-| vurv78/qjson         | 0.014956   | 0.019906   | 0.0165542  | x1.29595    |
-| grafi-tt/lunajson    | 0.011663   | 0.015941   | 0.0127739  | x1          |
+| ---                  | ---        | ---        | ---        | ---         |
+| actboy168/json       | 0.018951   | 0.024308   | 0.0201813  | x1.63619    |
+| vurv78/qjson         | 0.01469    | 0.018899   | 0.0153881  | x1.24758    |
+| rxi/json             | 0.045162   | 0.05497    | 0.0473737  | x3.84079    |
+| luadist/dkjson       | 0.028868   | 0.041998   | 0.0318926  | x2.58567    |
+| grafi-tt/lunajson    | 0.011779   | 0.015871   | 0.0123344  | x1          |
 
 | Name (Encode)        | Min        | Max        | Avg        | Avg / Best  |
-| actboy168/json       | 0.016101   | 0.029937   | 0.0171029  | x3.06483    |
-| rxi/json             | 0.015395   | 0.019102   | 0.0168397  | x3.01765    |
-| luadist/dkjson       | 0.02162    | 0.025159   | 0.0226016  | x4.05019    |
-| vurv78/qjson         | 0.005168   | 0.0067     | 0.00558039 | x1          |
-| grafi-tt/lunajson    | 0.011286   | 0.016953   | 0.0124624  | x2.23325    |
-```
+| ---                  | ---        | ---        | ---        | ---         |
+| actboy168/json       | 0.016695   | 0.020211   | 0.0175769  | x3.02879    |
+| vurv78/qjson         | 0.005439   | 0.006851   | 0.00580326 | x1          |
+| rxi/json             | 0.016098   | 0.024696   | 0.0173684  | x2.99287    |
+| luadist/dkjson       | 0.022419   | 0.026535   | 0.0233218  | x4.01874    |
+| grafi-tt/lunajson    | 0.011502   | 0.014437   | 0.0121709  | x2.09725    |
 
-From here, you can see this library is significantly faster for `json.encode` in comparison to `json.decode`.
-Additionally `decode` is faster on PUC-Lua than LuaJIT.
+From here, you can see this library is fastest at encoding.
 
-Currently working on making it faster for LuaJIT, but this is pretty hard to fix considering making it faster would require not using as many [lua patterns](https://www.lua.org/pil/20.2.html), which would slow down PUC-Lua.
+Decoding is getting there. Currently balancing performance between PUC-Lua and Luajit.

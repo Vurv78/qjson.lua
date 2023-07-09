@@ -79,6 +79,7 @@ do
 	end
 
 	print( ("| %-20s | %-10s | %-10s | %-10s | %-11s |"):format("Name (Decode)", "Min", "Max", "Avg", "Avg / Best") )
+	print( ("| %-20s | %-10s | %-10s | %-10s | %-11s |"):format("---", "---", "---", "---", "---") )
 	for name, result in pairs(total) do
 		print( ("| %-20s | %-10g | %-10g | %-10g | x%-10g |"):format(name, result.min, result.max, result.avg, result.avg / best) )
 	end
@@ -103,6 +104,7 @@ do
 	end
 
 	print( ("| %-20s | %-10s | %-10s | %-10s | %-11s |"):format("Name (Encode)", "Min", "Max", "Avg", "Avg / Best") )
+	print( ("| %-20s | %-10s | %-10s | %-10s | %-11s |"):format("---", "---", "---", "---", "---") )
 	for name, result in pairs(total) do
 		print( ("| %-20s | %-10g | %-10g | %-10g | x%-10g |"):format(name, result.min, result.max, result.avg, result.avg / best) )
 	end
