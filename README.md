@@ -41,19 +41,19 @@ LuaJIT 2.1.0-beta3 (Windows 11)
 
 | Name (Decode)        | Min        | Max        | Avg        | Avg / Best  |
 | ---                  | ---        | ---        | ---        | ---         |
-| actboy168/json       | 0          | 0.025      | 0.013235   | x2.0456     |
-| vurv78/qjson         | 0          | 0.023      | 0.00881    | x1.36167    |
-| rxi/json             | 0          | 0.022      | 0.00704    | x1.0881     |
-| luadist/dkjson       | 0.004      | 0.026      | 0.01519    | x2.34776    |
-| grafi-tt/lunajson    | 0          | 0.018      | 0.00647    | x1          |
+| rxi/json             | 0.005      | 0.009      | 0.00672    | x1          |
+| actboy168/json       | 0.011      | 0.016      | 0.01295    | x1.92708    |
+| luadist/dkjson       | 0.012      | 0.017      | 0.01426    | x2.12202    |
+| vurv78/qjson         | 0.008      | 0.015      | 0.00939    | x1.39732    |
+| grafi-tt/lunajson    | 0.005      | 0.012      | 0.007095   | x1.0558     |
 
 | Name (Encode)        | Min        | Max        | Avg        | Avg / Best  |
 | ---                  | ---        | ---        | ---        | ---         |
-| actboy168/json       | 0          | 0.023      | 0.01057    | x6.84142    |
-| vurv78/qjson         | 0.001      | 0.003      | 0.001545   | x1          |
-| rxi/json             | 0          | 0.024      | 0.010825   | x7.00647    |
-| luadist/dkjson       | 0.013      | 0.019      | 0.01588    | x10.2783    |
-| grafi-tt/lunajson    | 0          | 0.02       | 0.00907    | x5.87055    |
+| rxi/json             | 0.01       | 0.02       | 0.011745   | x7.93581    |
+| actboy168/json       | 0.009      | 0.014      | 0.01077    | x7.27703    |
+| luadist/dkjson       | 0.015      | 0.018      | 0.01559    | x10.5338    |
+| vurv78/qjson         | 0.001      | 0.003      | 0.00148    | x1          |
+| grafi-tt/lunajson    | 0.007      | 0.01       | 0.008645   | x5.84122    |
 
 ```
 Lua 5.3 (WSL : Windows 11)
@@ -62,20 +62,20 @@ Lua 5.3 (WSL : Windows 11)
 
 | Name (Decode)        | Min        | Max        | Avg        | Avg / Best  |
 | ---                  | ---        | ---        | ---        | ---         |
-| actboy168/json       | 0.018951   | 0.024308   | 0.0201813  | x1.63619    |
-| vurv78/qjson         | 0.01469    | 0.018899   | 0.0153881  | x1.24758    |
-| rxi/json             | 0.045162   | 0.05497    | 0.0473737  | x3.84079    |
-| luadist/dkjson       | 0.028868   | 0.041998   | 0.0318926  | x2.58567    |
-| grafi-tt/lunajson    | 0.011779   | 0.015871   | 0.0123344  | x1          |
+| actboy168/json       | 0.019036   | 0.024134   | 0.0204356  | x1.63325    |
+| rxi/json             | 0.045677   | 0.059829   | 0.0487656  | x3.89742    |
+| vurv78/qjson         | 0.01478    | 0.02029    | 0.0160733  | x1.28461    |
+| luadist/dkjson       | 0.028986   | 0.038415   | 0.0314367  | x2.51247    |
+| grafi-tt/lunajson    | 0.01162    | 0.015419   | 0.0125123  | x1          |
 
 | Name (Encode)        | Min        | Max        | Avg        | Avg / Best  |
 | ---                  | ---        | ---        | ---        | ---         |
-| actboy168/json       | 0.016695   | 0.020211   | 0.0175769  | x3.02879    |
-| vurv78/qjson         | 0.005439   | 0.006851   | 0.00580326 | x1          |
-| rxi/json             | 0.016098   | 0.024696   | 0.0173684  | x2.99287    |
-| luadist/dkjson       | 0.022419   | 0.026535   | 0.0233218  | x4.01874    |
-| grafi-tt/lunajson    | 0.011502   | 0.014437   | 0.0121709  | x2.09725    |
+| actboy168/json       | 0.016462   | 0.019902   | 0.0176806  | x3.0031     |
+| rxi/json             | 0.016091   | 0.020716   | 0.0182224  | x3.09512    |
+| vurv78/qjson         | 0.005352   | 0.008078   | 0.00588746 | x1          |
+| luadist/dkjson       | 0.022643   | 0.04247    | 0.0249368  | x4.23559    |
+| grafi-tt/lunajson    | 0.011779   | 0.014569   | 0.0128647  | x2.1851     |
 
-From here, you can see this library is fastest at encoding.
+From here, you can see this library is fastest at encoding, running 8-10x faster than the most commonly used libraries.
 
 Decoding is getting there. Currently balancing performance between PUC-Lua and Luajit.

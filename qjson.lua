@@ -156,9 +156,7 @@ end
 
 local concat, tostring, format, pairs, type = table.concat, tostring, string.format, pairs, type
 
-local function isarray(t)
-	local len = #t
-
+local function isarray(t, len)
 	for k in pairs(t) do
 		if len == 0 or type(k) ~= "number" then
 			return false
@@ -184,11 +182,11 @@ local function value(v, buffer, nbuffer)
 end
 
 function _encode(tbl --[[@param tbl table]], buffer --[[@param buffer table]], nbuffer --[[@param nbuffer integer]])
-	if isarray(tbl) then
+	local len = #tbl
+	if isarray(tbl, len) then
 		nbuffer = nbuffer + 1
 		buffer[nbuffer] = "["
 
-		local len = #tbl
 		for i = 1, len do
 			nbuffer = value(tbl[i], buffer, nbuffer) + 1
 			buffer[nbuffer] = ","
